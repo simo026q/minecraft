@@ -46,21 +46,29 @@ services:
     image: local/minecraft-backup:latest
     container_name: minecraft-backup
 
+    env_file:
+      - .env
+
     restart: unless-stopped
     depends_on:
       - server
 
     environment:
       BACKUP_CRON: ${BACKUP_CRON:-0 0 * * *}
+      BACKUP_KEEP_DAILY: ${BACKUP_KEEP_DAILY:-7}
+      BACKUP_KEEP_WEEKLY: ${BACKUP_KEEP_WEEKLY:-4}
+      BACKUP_KEEP_MONTHLY: ${BACKUP_KEEP_MONTHLY:-6}
       RCON_ENABLED: ${RCON_ENABLED:-false}
       RCON_HOST: minecraft-server
       RCON_PORT: ${RCON_PORT:-25575}
       RCON_PASSWORD: ${RCON_PASSWORD:-}
+      RESTIC_REPOSITORY: ${RESTIC_REPOSITORY:-/backup/restic}
       TZ: ${TZ:-UTC}
 
     volumes:
       - ./data:/data:ro
       - ./backups:/backup
+      - ./restic-config:/restic-config:ro
 
     security_opt:
       - no-new-privileges:true

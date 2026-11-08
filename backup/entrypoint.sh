@@ -15,13 +15,19 @@ if [ -z "${RCON_PASSWORD:-}" ]; then
     exit 1
 fi
 
+if [ -z "${RESTIC_REPOSITORY:-}" ] || [ -z "${RESTIC_PASSWORD:-}" ]; then
+    echo "ERROR: RESTIC_REPOSITORY and RESTIC_PASSWORD must be set." >&2
+    exit 1
+fi
+
 if ! su-exec backup /bin/sh -c '[ -r /data/world ]'; then
     echo "ERROR: /data/world is not readable by the backup user." >&2
     exit 1
 fi
 
-if ! su-exec backup /bin/sh -c '[ -w /backup ]'; then
-    echo "ERROR: /backup is not writable by the backup user." >&2
+if ! su-exec backup /bin/sh -c 'restic snapshots >/dev/null'; then
+    echo "ERROR: Restic repository is unavailable or not initialized." >&2
+    echo "Initialize it with: docker compose run --rm --no-deps --entrypoint restic backup init" >&2
     exit 1
 fi
 
