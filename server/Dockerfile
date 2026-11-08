@@ -79,7 +79,10 @@ COPY --chmod=755 \
 
 ENV EULA=FALSE \
     MIN_MEMORY=1G \
-    MAX_MEMORY=2G
+    MAX_MEMORY=2G \
+    RCON_ENABLED=false \
+    RCON_PORT=25575 \
+    RCON_PASSWORD=
 
 WORKDIR /data
 
