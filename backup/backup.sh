@@ -1,6 +1,11 @@
 #!/bin/sh
 set -eu
 
+if [ "$(id -u)" -ne 10001 ]; then
+    echo "ERROR: Backup must run as the backup user (UID 10001)." >&2
+    exit 1
+fi
+
 export MCRCON_HOST="${RCON_HOST:-minecraft}"
 export MCRCON_PORT="${RCON_PORT:-25575}"
 export MCRCON_PASS="${RCON_PASSWORD:?RCON_PASSWORD must be set}"

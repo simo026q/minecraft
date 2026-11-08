@@ -15,13 +15,13 @@ if [ -z "${RCON_PASSWORD:-}" ]; then
     exit 1
 fi
 
-if [ ! -r /data/world ]; then
-    echo "ERROR: /data/world is not readable." >&2
+if ! su-exec backup /bin/sh -c '[ -r /data/world ]'; then
+    echo "ERROR: /data/world is not readable by the backup user." >&2
     exit 1
 fi
 
-if [ ! -w /backup ]; then
-    echo "ERROR: /backup is not writable." >&2
+if ! su-exec backup /bin/sh -c '[ -w /backup ]'; then
+    echo "ERROR: /backup is not writable by the backup user." >&2
     exit 1
 fi
 
