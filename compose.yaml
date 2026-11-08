@@ -1,12 +1,12 @@
 services:
-  minecraft:
+  server:
     build:
       context: ./server
       args:
         MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.3}
 
-    image: local/minecraft:${MINECRAFT_VERSION:-26.3}
-    container_name: minecraft
+    image: local/minecraft-server:${MINECRAFT_VERSION:-26.3}
+    container_name: minecraft-server
 
     restart: unless-stopped
     stop_grace_period: 2m
@@ -33,3 +33,32 @@ services:
 
     mem_limit: ${CONTAINER_MEMORY:-4G}
     cpus: ${CONTAINER_CPUS:-1.0}
+
+  backup:
+    build:
+      context: ./backup
+
+    image: local/minecraft-backup:latest
+    container_name: minecraft-backup
+
+    restart: unless-stopped
+    depends_on:
+      - server
+
+    environment:
+      BACKUP_CRON: ${BACKUP_CRON:-0 0 * * *}
+      RCON_ENABLED: ${RCON_ENABLED:-false}
+      RCON_HOST: minecraft-server
+      RCON_PORT: ${RCON_PORT:-25575}
+      RCON_PASSWORD: ${RCON_PASSWORD:-}
+      TZ: ${TZ:-UTC}
+
+    volumes:
+      - ./data:/data:ro
+      - ./backups:/backup
+
+    security_opt:
+      - no-new-privileges:true
+
+    mem_limit: 256m
+    cpus: 0.5
