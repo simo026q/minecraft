@@ -1,0 +1,32 @@
+services:
+  minecraft:
+    build:
+      context: ./server
+      args:
+        MINECRAFT_VERSION: "26.3"
+
+    image: local/minecraft:26.3
+    container_name: minecraft
+
+    restart: unless-stopped
+    stop_grace_period: 2m
+
+    ports:
+      - "25565:25565/tcp"
+
+    environment:
+      EULA: "TRUE"
+      MEMORY_MIN: "1G"
+      MEMORY_MAX: "8G"
+
+    volumes:
+      - ./data:/data
+
+    stdin_open: true
+    tty: true
+
+    security_opt:
+      - no-new-privileges:true
+
+    mem_limit: 10g
+    cpus: 6.0
