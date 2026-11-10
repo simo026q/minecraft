@@ -46,6 +46,7 @@ echo "Applying Restic retention policy..."
 restic forget \
     --host minecraft \
     --tag minecraft \
+    --keep-hourly "${BACKUP_KEEP_HOURLY:-0}" \
     --keep-daily "${BACKUP_KEEP_DAILY:-7}" \
     --keep-weekly "${BACKUP_KEEP_WEEKLY:-4}" \
     --keep-monthly "${BACKUP_KEEP_MONTHLY:-6}" \

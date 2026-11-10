@@ -27,9 +27,10 @@ COPY --chmod=755 backup.sh /usr/local/bin/backup.sh
 RUN chmod 755 /usr/local/bin/entrypoint.sh /usr/local/bin/backup.sh
 
 ENV BACKUP_CRON="0 0 * * *" \
-    BACKUP_KEEP_DAILY=7 \
-    BACKUP_KEEP_WEEKLY=4 \
-    BACKUP_KEEP_MONTHLY=6 \
+    BACKUP_KEEP_HOURLY= \
+    BACKUP_KEEP_DAILY= \
+    BACKUP_KEEP_WEEKLY= \
+    BACKUP_KEEP_MONTHLY= \
     RESTIC_CACHE_DIR=/tmp/restic-cache \
     HOME=/restic-config \
     RCON_HOST=minecraft-server \
